@@ -1,14 +1,18 @@
 <template>
     <div class="main">
         <div id="tool" class="tool">
-            <span class="tip">绘制选项</span>
             <RadioGroup class="radio radio-main" v-model:value="mode">
                 <Radio class="radio" :value="DrawMode.Draw">画笔</Radio>
                 <Radio class="radio" :value="DrawMode.Erase">橡皮</Radio>
             </RadioGroup>
             <div class="size-slider">
                 <span>{{ mode === DrawMode.Draw ? '画笔' : '橡皮' }}大小</span>
-                <Slider :min="1" :max="100" v-model:value="size"></Slider>
+                <Slider
+                    class="slider"
+                    :min="1"
+                    :max="100"
+                    v-model:value="size"
+                ></Slider>
                 <InputNumber
                     :min="1"
                     :max="100"
@@ -89,7 +93,15 @@ async function confirm() {
         closable: false
     });
     drawer.endPath();
-    const data = drawer.canvas.toDataURL('image/png');
+    const main = drawer.canvas;
+    const canvas = document.createElement('canvas');
+    canvas.width = main.width;
+    canvas.height = main.height;
+    const ctx = canvas.getContext('2d')!;
+    ctx.fillStyle = '#fff';
+    ctx.fillRect(0, 0, canvas.width, canvas.height);
+    ctx.drawImage(main, 0, 0);
+    const data = canvas.toDataURL('image/png');
     const form = new FormData();
     form.append('data', data);
     const error = await axios.post('/writeImage', data).catch(reason => reason);
@@ -160,11 +172,6 @@ onMounted(() => {
     font-size: 20px;
 }
 
-.tip {
-    justify-self: left;
-    margin-right: 40px;
-}
-
 .radio-main {
     margin-right: 30px;
 }
@@ -182,6 +189,16 @@ onMounted(() => {
 
 .drawer {
     border: 2px solid #333;
+}
+
+.size-slider {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.slider {
+    width: 200px;
 }
 
 #drawer-main,

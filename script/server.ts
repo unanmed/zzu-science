@@ -2,6 +2,7 @@ import { emptyDir } from 'fs-extra';
 import { createWriteStream } from 'node:fs';
 import { writeFile } from 'node:fs/promises';
 import { Server, createServer as http } from 'node:http';
+import { networkInterfaces } from 'node:os';
 import { join } from 'node:path';
 import { parse } from 'node:url';
 import { createServer } from 'vite';
@@ -86,11 +87,35 @@ function setupHttp(server: Server) {
     });
 }
 
+function getLocalIPAddress() {
+    const interfaces = networkInterfaces();
+    for (const interfaceName in interfaces) {
+        const addresses = interfaces[interfaceName];
+        if (!addresses) return 'localhost';
+        for (const address of addresses) {
+            // 只获取 IPv4 地址，且不为本地回环地址
+            if (
+                address.family === 'IPv4' &&
+                !address.internal &&
+                address.address !== '26.187.45.168'
+            ) {
+                return address.address;
+            }
+        }
+    }
+    return 'localhost'; // 如果无法检测到局域网地址，默认回退到 localhost
+}
+
 (async function () {
     await emptyDir(IMAGE_PATH);
-    const vite = await createServer();
+    const host = getLocalIPAddress();
+    const vite = await createServer({
+        server: {
+            host
+        }
+    });
     await vite.listen(5000);
-    console.log(`网页：http://localhost:5000/`);
+    console.log(`网页：http://${host}:5000/`);
 
     const server = await startHttpServer(4000);
     h = server;
