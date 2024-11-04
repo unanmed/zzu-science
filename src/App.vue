@@ -169,7 +169,7 @@ onMounted(() => {
     align-items: center;
     height: 100px;
     width: 100%;
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .radio-main {
@@ -177,13 +177,13 @@ onMounted(() => {
 }
 
 .radio {
-    font-size: 20px;
+    font-size: 16px;
 }
 
 .button {
-    font-size: 20px;
-    width: 120px;
-    height: 42px;
+    font-size: 16px;
+    width: 80px;
+    height: 36px;
     margin-left: 20px;
 }
 
