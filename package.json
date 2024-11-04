@@ -4,16 +4,22 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "tsx script/server.ts",
     "build": "vue-tsc -b && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
+    "ant-design-vue": "^4.2.5",
     "axios": "^1.7.7",
+    "eventemitter3": "^5.0.1",
     "vue": "^3.5.12"
   },
   "devDependencies": {
+    "@types/fs-extra": "^11.0.4",
+    "@types/node": "^22.8.7",
     "@vitejs/plugin-vue": "^5.1.4",
+    "fs-extra": "^11.2.0",
+    "tsx": "^4.19.2",
     "typescript": "~5.6.2",
     "vite": "^5.4.10",
     "vue-tsc": "^2.1.8"
