@@ -52,11 +52,24 @@ let temp: HTMLCanvasElement;
 let div: HTMLDivElement;
 let tool: HTMLDivElement;
 
+let drawSize = 5;
+let eraseSize = 30;
+
 watch(mode, v => {
+    if (v === DrawMode.Draw) {
+        size.value = drawSize;
+    } else {
+        size.value = eraseSize;
+    }
     drawer.mode(v);
 });
 
 watch(size, v => {
+    if (mode.value === DrawMode.Draw) {
+        drawSize = size.value;
+    } else {
+        eraseSize = size.value;
+    }
     drawer.setBrushSize(v);
 });
 
