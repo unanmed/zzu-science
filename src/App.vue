@@ -129,6 +129,7 @@ async function confirm() {
         message.success({
             content: '上传完成！'
         });
+        drawer.clear();
     }
 }
 
